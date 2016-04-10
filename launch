@@ -1,0 +1,65 @@
+#!/bin/bash
+
+# Debug
+# set -x
+
+# Do Not Change these variables unless you know what you are doing
+export ESC=$
+export DJANGO_SECRET_KEY=$(openssl rand -hex 32)
+
+# Default variables. These shall be overridden :-)
+export GUNICORN_WORKERS=${GUNICORN_WORKERS:-1}
+export SITE_URI=${SITE_URI:-http://example.com}
+export SITE_FQDN=$(echo $SITE_URI | sed -e "s/[^/]*\/\/\([^@]*@\)\?\([^:/]*\).*/\2/")
+[ "${SITE_URI::5}" == "https" ] && SITE_SCHEME="https" || SITE_SCHEME="http"
+export SITE_SCHEME
+[ ${PUBLIC_REGISTER,,} == "false" ] \
+&& { PUBLIC_REGISTER="False"; PUBLIC_REGISTER_JS="false"; }  \
+|| { PUBLIC_REGISTER="True"; PUBLIC_REGISTER_JS="true"; }
+export PUBLIC_REGISTER PUBLIC_REGISTER_JS
+export ADMIN_EMAIL=${ADMIN_EMAIL:-admin@example.com}
+export NOREPLY_EMAIL=${NOREPLY_EMAIL:-no-reply@example.com}
+export TAIGA_DB_HOST=${TAIGA_DB_HOST:-postgres}
+export TAIGA_DB_PORT=${TAIGA_DB_PORT:-5432}
+export TAIGA_DB_NAME=${TAIGA_DB_NAME:-taiga}
+export TAIGA_DB_USER=${TAIGA_DB_USER:-taiga}
+export TAIGA_DB_PASSWORD=${TAIGA_DB_PASSWORD:-mysecretpassword}
+
+# Generate configs based on the template seeds
+envsubst < /tmp/taiga.tmpl > /etc/nginx/sites-enabled/taiga
+envsubst < /tmp/circus.ini.tmpl > $DATA/circus.ini
+envsubst < /tmp/conf.json.tmpl > $DATA/taiga-front-dist/dist/conf.json
+envsubst < /tmp/local.py.tmpl > $DATA/taiga-back/settings/local.py
+
+# Keep sensitive information out of here
+unset DJANGO_SECRET_KEY TAIGA_DB_PASSWORD
+
+# Make sure the data is readable
+chown -Rh $USER:$GROUP $DATA
+
+# Allow a little delay on the first run
+# to make sure Database is set and ready
+[ -e "/tmp/taiga.firstrun" ] || ( sleep 5; touch /tmp/taiga.firstrun )
+
+# Upgrade DB schemas, etc...
+# This is important when Taiga's codebase gets updated
+su -s /bin/sh $USER -c '. $DATA/venvtaiga/bin/activate
+cd $DATA/taiga-back
+python3 manage.py migrate --noinput
+python3 manage.py compilemessages
+python3 manage.py collectstatic --noinput
+deactivate'
+
+# (Optional) Create a new user admin with password 123123 and
+# fill Taiga with the Sample data
+# su -s /bin/sh $USER -c '. $DATA/venvtaiga/bin/activate
+# cd $DATA/taiga-back
+# python3 manage.py loaddata initial_user
+# python3 manage.py loaddata initial_project_templates
+# python3 manage.py loaddata initial_role
+# python3 manage.py sample_data
+# deactivate'
+
+# Launch the backend
+service nginx start
+su -s /bin/sh $USER -c '/usr/local/bin/circusd "$DATA/circus.ini"'
