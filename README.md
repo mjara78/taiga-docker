@@ -1,8 +1,7 @@
 Taiga in Docker
 ===============
 
-This container allows you to run [Taiga](https://taiga.io/) in a Docker
-container.
+This container allows you to run [Taiga](https://taiga.io/) in a Docker container.
 
 What is Taiga?
 --------------
@@ -43,7 +42,7 @@ Docker Compose
 
 Below is a docker compose file as example
 
-docker-compose.yml
+**docker-compose.yml**
 ```
 version: '2'
 
@@ -92,7 +91,7 @@ services:
 The following file is required so that Postgres will create taiga database that
 is used by the Taiga backend.
 
-db/init-taiga-db.sh
+**db/init-taiga-db.sh**
 ```
 #!/bin/bash
 set -e
@@ -110,7 +109,7 @@ The environment variables
 
 This file will defines a superuser for Postgres.
 
-postgres.env
+**postgres.env**
 ```
 POSTGRES_USER=admin
 POSTGRES_PASSWORD=admin
@@ -118,7 +117,7 @@ POSTGRES_PASSWORD=admin
 
 This file defines individual settings for Taiga.
 
-taiga.env
+**taiga.env**
 ```
 GUNICORN_WORKERS=1
 SITE_URI=http://taiga.mydomain.com
@@ -129,7 +128,7 @@ NOREPLY_EMAIL=no-reply@mydomain.com
 
 This file defines the database settings for Taiga.
 
-taiga-db.env
+**taiga-db.env**
 ```
 TAIGA_DB_USER=taiga
 TAIGA_DB_NAME=taiga
@@ -138,7 +137,10 @@ TAIGA_DB_HOST=postgres
 TAIGA_DB_PORT=5432
 ```
 
+
 Run the Taiga
+-------------
+
 ```
 docker-compose up -d taiga
 ```
@@ -169,26 +171,20 @@ Accessing the Taiga Database
 
 You can access it using the docker compose or docker as follows
 
-```
-docker-compose run --rm postgres sh -c 'PGPASSWORD=$TAIGA_DB_PASSWORD exec psql -h "$TAIGA_DB_HOST" -U $TAIGA_DB_USER'
-```
+> docker-compose run --rm postgres sh -c 'PGPASSWORD=$TAIGA_DB_PASSWORD exec psql -h "$TAIGA_DB_HOST" -U $TAIGA_DB_USER'
 
-```
-docker run -ti --rm --net taiga_backend --env-file taiga-db.env postgres sh -c 'PGPASSWORD=$TAIGA_DB_PASSWORD exec psql -h "$TAIGA_DB_HOST" -U $TAIGA_DB_USER'
-```
+> docker run -ti --rm --net taiga_backend --env-file taiga-db.env postgres sh -c 'PGPASSWORD=$TAIGA_DB_PASSWORD exec psql -h "$TAIGA_DB_HOST" -U $TAIGA_DB_USER'
 
 Backup the database
 -------------------
 
 Below is an example of how you can make the Taiga PostgreSQL database backup
-```
-docker-compose run --rm postgres sh -c 'PGPASSWORD=$TAIGA_DB_PASSWORD exec pg_dump -h "$TAIGA_DB_HOST" -U $TAIGA_DB_USER $TAIGA_DB_NAME' > taiga-db.backup
-```
+
+> docker-compose run --rm postgres sh -c 'PGPASSWORD=$TAIGA_DB_PASSWORD exec pg_dump -h "$TAIGA_DB_HOST" -U $TAIGA_DB_USER $TAIGA_DB_NAME' > taiga-db.backup
 
 To restore it
-```
-docker-compose run --rm postgres sh -c 'PGPASSWORD=$TAIGA_DB_PASSWORD exec psql -h "$TAIGA_DB_HOST" -U $TAIGA_DB_USER $TAIGA_DB_NAME' < taiga-db.backup
-```
+
+> docker-compose run --rm postgres sh -c 'PGPASSWORD=$TAIGA_DB_PASSWORD exec psql -h "$TAIGA_DB_HOST" -U $TAIGA_DB_USER $TAIGA_DB_NAME' < taiga-db.backup
 
 There are also volumes containing the data you might want to backup externally
 ```
