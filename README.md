@@ -154,6 +154,16 @@ SSL/TLS certificates.
 Maintenance
 ===========
 
+Keeping your image up2dated
+---------------------------
+
+This is simple, just run the following commands which will ensure that you
+are running the latest images
+```
+docker-compose pull
+docker-compose up -d
+```
+
 Accessing the Taiga Database
 ----------------------------
 
