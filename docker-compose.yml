@@ -2,7 +2,6 @@ version: '2'
 
 volumes:
   postgres_data: {}
-  taiga_postgres: {}
   taiga_static: {}
   taiga_media: {}
 

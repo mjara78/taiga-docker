@@ -48,7 +48,6 @@ version: '2'
 
 volumes:
   postgres_data: {}
-  taiga_postgres: {}
   taiga_static: {}
   taiga_media: {}
 
@@ -190,7 +189,6 @@ There are also volumes containing the data you might want to backup externally
 ```
 $ docker volume ls
 DRIVER              VOLUME NAME
-local               taiga_taiga_postgres
 local               taiga_taiga_media
 local               taiga_taiga_static
 local               taiga_postgres_data
