@@ -145,6 +145,8 @@ docker-compose up -d taiga
 ```
 
 Now you can access Taiga with your favorite Web Browser.
+Default user **admin** with password **123123** will be created on the first
+run. **Please do not forget to change the password.**
 
 I recommend to run nginx reverse proxy in front of this container, so that
 you could use TLS.
