@@ -39,7 +39,7 @@ chown -Rh $USER:$GROUP $DATA
 
 # Allow a little delay on the first run
 # to make sure Database is set and ready
-[ -e "/tmp/taiga.firstrun" ] || ( sleep 5; touch /tmp/taiga.firstrun )
+[ -e "/tmp/taiga.firstrun" ] || ( sleep 10; touch /tmp/taiga.firstrun )
 
 # Upgrade DB schemas, etc...
 # This is important when Taiga's codebase gets updated
