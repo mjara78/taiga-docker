@@ -39,25 +39,32 @@ chown -Rh $USER:$GROUP $DATA
 
 # Allow a little delay on the first run
 # to make sure Database is set and ready
-[ -e "/tmp/taiga.firstrun" ] || ( sleep 10; touch /tmp/taiga.firstrun )
+[ -e "/tmp/taiga.firstrun" ] || ( echo "Waiting for 10 seconds to let the DB initialize" \
+                                  && sleep 10 )
 
 # Upgrade DB schemas, etc...
 # This is important when Taiga's codebase gets updated
 su -s /bin/sh $USER -c '. $DATA/venvtaiga/bin/activate
 cd $DATA/taiga-back
-python3 manage.py migrate --noinput
-python3 manage.py compilemessages
-python3 manage.py collectstatic --noinput
+python manage.py migrate --noinput
+[ -e "/tmp/taiga.firstrun" ] || ( python manage.py loaddata initial_user \
+                                  && python manage.py loaddata initial_project_templates \
+                                  && python manage.py loaddata initial_role \
+                                  && echo "A new user admin with password 123123 has been created" )
+python manage.py compilemessages
+python manage.py collectstatic --noinput
 deactivate'
+
+touch /tmp/taiga.firstrun
 
 # (Optional) Create a new user admin with password 123123 and
 # fill Taiga with the Sample data
 # su -s /bin/sh $USER -c '. $DATA/venvtaiga/bin/activate
 # cd $DATA/taiga-back
-# python3 manage.py loaddata initial_user
-# python3 manage.py loaddata initial_project_templates
-# python3 manage.py loaddata initial_role
-# python3 manage.py sample_data
+# python manage.py loaddata initial_user
+# python manage.py loaddata initial_project_templates
+# python manage.py loaddata initial_role
+# python manage.py sample_data
 # deactivate'
 
 # Launch the backend
