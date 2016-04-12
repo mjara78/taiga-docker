@@ -76,8 +76,8 @@ services:
     ports:
       - 80:80
     volumes:
-      - taiga_static:/usr/local/taiga/static
-      - taiga_media:/usr/local/taiga/media
+      - taiga_static:/opt/taiga/static
+      - taiga_media:/opt/taiga/media
     env_file:
       - ./taiga.env
       - ./taiga-db.env

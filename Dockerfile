@@ -21,7 +21,7 @@ ENV USER taiga
 ENV UID 1000
 ENV GROUP www-data
 ENV HOME /home/$USER
-ENV DATA /usr/local/taiga
+ENV DATA /opt/taiga
 RUN useradd -u $UID -m -d $HOME -s /usr/sbin/nologin -g $GROUP $USER
 RUN mkdir -p $DATA $DATA/media $DATA/static $DATA/logs /var/log/taiga \
     && chown -Rh $USER:$GROUP $DATA /var/log/taiga
