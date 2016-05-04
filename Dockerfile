@@ -1,5 +1,6 @@
 FROM debian:jessie
 MAINTAINER "Andrey Arapov <andrey.arapov@nixaid.com>"
+EXPOSE 80
 
 # To avoid problems with Dialog and curses wizards
 ENV DEBIAN_FRONTEND noninteractive
