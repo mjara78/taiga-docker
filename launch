@@ -25,6 +25,14 @@ export TAIGA_DB_NAME=${TAIGA_DB_NAME:-taiga}
 export TAIGA_DB_USER=${TAIGA_DB_USER:-taiga}
 export TAIGA_DB_PASSWORD=${TAIGA_DB_PASSWORD:-mysecretpassword}
 
+export EMAIL_HOST=${EMAIL_HOST:-localhost}
+export EMAIL_HOST_USER=${EMAIL_HOST_USER:-noreply@noreply.com}
+export EMAIL_HOST_PASSWORD=${EMAIL_HOST_PASSWORD:-password}
+export EMAIL_HOST_PORT=${EMAIL_HOST_PORT:-587}
+export EMAIL_USE_TLS=${EMAIL_USE_TLS:-False}
+export EMAIL_BACKEND=${EMAIL_BACKEND:-django.core.mail.backends.smtp.EmailBackend}
+
+
 # Generate configs based on the template seeds
 envsubst < /tmp/taiga.tmpl > /etc/nginx/sites-enabled/taiga
 envsubst < /tmp/circus.ini.tmpl > $DATA/circus.ini
