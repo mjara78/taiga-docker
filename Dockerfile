@@ -25,20 +25,23 @@ ENV HOME /home/$USER
 ENV DATA /opt/taiga
 RUN useradd -u $UID -m -d $HOME -s /usr/sbin/nologin -g $GROUP $USER
 RUN mkdir -p $DATA $DATA/media $DATA/static $DATA/logs /var/log/taiga \
-    && chown -Rh $USER:$GROUP $DATA /var/log/taiga
+    && chown -Rh $USER:$GROUP /var/log/taiga
+
+WORKDIR $DATA
 
 # Install taiga-back
-USER $USER
-WORKDIR $DATA
-RUN git clone -b stable https://github.com/taigaio/taiga-back.git $DATA/taiga-back \
+RUN git clone -b stable https://github.com/taigaio/taiga-back.git taiga-back \
     && virtualenv -p /usr/bin/python3.4 venvtaiga \
     && . venvtaiga/bin/activate \
-    && cd $DATA/taiga-back \
+    && cd taiga-back \
     && pip3 install -r requirements.txt \
     && deactivate
 
 # Install taiga-front (compiled)
-RUN git clone -b stable https://github.com/taigaio/taiga-front-dist.git $DATA/taiga-front-dist
+RUN git clone -b stable https://github.com/taigaio/taiga-front-dist.git taiga-front-dist
+COPY robots.txt taiga-front-dist/dist/robots.txt
+
+USER $USER
 
 USER root
 
