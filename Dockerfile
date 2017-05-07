@@ -34,6 +34,7 @@ RUN git clone -b stable https://github.com/taigaio/taiga-back.git taiga-back \
     && virtualenv -p /usr/bin/python3.4 venvtaiga \
     && . venvtaiga/bin/activate \
     && cd taiga-back \
+    && pip3 install -U setuptools \
     && pip3 install -r requirements.txt \
     && deactivate
 

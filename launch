@@ -45,7 +45,8 @@ chmod +x /already_initialized
 unset DJANGO_SECRET_KEY TAIGA_DB_PASSWORD
 
 # Make sure the dynamic data is writable by the circus/gunicorn
-chown -Rh $USER:$GROUP $DATA/media $DATA/taiga-back/taiga/locale $DATA/logs
+chown -Rh $USER:$GROUP $DATA/media $DATA/taiga-back/taiga/locale $DATA/logs \
+                       $DATA/static
 
 # Make sure the PostgreSQL database is up and ready
 while ! ping -c 1 -W 1 $TAIGA_DB_HOST >/dev/null 2>&1; do

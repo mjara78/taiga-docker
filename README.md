@@ -119,7 +119,7 @@ This file defines individual settings for Taiga.
 **taiga.env**
 ```
 GUNICORN_WORKERS=1
-SITE_URI=http://taiga.mydomain.com
+SITE_URI=http://taiga
 PUBLIC_REGISTER=true
 ADMIN_EMAIL=admin@mydomain.com
 NOREPLY_EMAIL=no-reply@mydomain.com

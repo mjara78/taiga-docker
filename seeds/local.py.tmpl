@@ -17,10 +17,16 @@ ADMINS = (
 
 # THROTTLING (Anti-flood)
 REST_FRAMEWORK["DEFAULT_THROTTLE_RATES"] = {
-    "anon": "20/min",
-    "user": "200/min",
-    "import-mode": "20/sec",
-    "import-dump-mode": "10/minute"
+    "anon-write": "20/min",
+    "user-write": None,
+    "anon-read": None,
+    "user-read": None,
+    "import-mode": None,
+    "import-dump-mode": "10/minute",
+    "create-memberships": None,
+    "login-fail": "5/minute",
+    "register-success": None,
+    "user-detail": None,
 }
 
 SECRET_KEY = "${DJANGO_SECRET_KEY}"
