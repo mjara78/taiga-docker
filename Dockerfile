@@ -1,4 +1,4 @@
-FROM debian:jessie
+FROM debian:stretch
 MAINTAINER "Andrey Arapov <andrey.arapov@nixaid.com>"
 EXPOSE 80
 
@@ -6,14 +6,14 @@ EXPOSE 80
 ENV DEBIAN_FRONTEND noninteractive
 
 # OS & Python env deps for taiga-back
-RUN apt-get update -qq \
+RUN apt-get update \
     && apt-get install -y -- build-essential binutils-doc autoconf flex \
         bison libjpeg-dev libfreetype6-dev zlib1g-dev libzmq3-dev \
         libgdbm-dev libncurses5-dev automake libtool libffi-dev curl git \
-        tmux gettext python3.4 python3.4-dev python3-pip libxml2-dev \
-        libxslt-dev libpq-dev virtualenv \
-        nginx \
-    && rm -rf -- /var/lib/apt/lists/*
+        tmux gettext python3 python3-dev python3-pip libxml2-dev \
+        libxslt-dev virtualenvwrapper libssl1.0-dev \
+        nginx && \
+        rm -rf -- /var/lib/apt/lists/*
 
 RUN pip3 install circus gunicorn
 
@@ -29,20 +29,21 @@ RUN mkdir -p $DATA $DATA/media $DATA/static $DATA/logs /var/log/taiga \
 
 WORKDIR $DATA
 
+RUN ln -svf /bin/bash /bin/sh
+
 # Install taiga-back
 RUN git clone -b stable https://github.com/taigaio/taiga-back.git taiga-back \
-    && virtualenv -p /usr/bin/python3.4 venvtaiga \
-    && . venvtaiga/bin/activate \
+    && source /usr/share/virtualenvwrapper/virtualenvwrapper.sh \
+    && mkvirtualenv -p /usr/bin/python3.5 venvtaiga \
+    && workon venvtaiga \
     && cd taiga-back \
-    && pip3 install -U setuptools \
+    && pip3 install --upgrade setuptools \
     && pip3 install -r requirements.txt \
     && deactivate
 
 # Install taiga-front (compiled)
 RUN git clone -b stable https://github.com/taigaio/taiga-front-dist.git taiga-front-dist
 COPY robots.txt taiga-front-dist/dist/robots.txt
-
-USER $USER
 
 USER root
 
