@@ -201,6 +201,35 @@ local               taiga_taiga_static
 local               taiga_postgres_data
 ```
 
+Quick launch
+------------
+
+For the impatient ones:
+
+```
+docker network create test1
+docker run --rm -ti --network test1 --name postgres postgres:10-alpine
+docker volume rm taiga_media
+docker volume rm taiga_static
+docker run --rm -ti --network test1 --name taiga -e SITE_URI=http://taiga -e TAIGA_DB_USER=taiga -e TAIGA_DB_NAME=taiga -e TAIGA_DB_PASSWORD=passw0rd -v taiga_static:/opt/taiga/static -v taiga_media:/opt/taiga/media andrey01/taiga
+```
+
+If you are running browser in a Docker container:
+
+```
+docker network connect test1 chrome_chrome_1
+```
+
+Open ``http://taiga`` and test Taiga.
+
+Tearing down:
+
+```
+docker volume rm taiga_media
+docker volume rm taiga_static
+docker network disconnect test1 chrome_chrome_1
+docker network rm test1
+```
 
 Useful links
 ------------
