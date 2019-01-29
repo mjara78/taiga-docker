@@ -22,8 +22,7 @@ services:
       - ./taiga-db.env
 
   taiga:
-    # https://hub.docker.com/r/andrey01/taiga
-    image: andrey01/taiga
+    image: taiga-custom
     # build: .
     networks:
       - backend
@@ -36,6 +35,6 @@ services:
       - ./taiga.env
       - ./taiga-db.env
     environment:
-      - TZ=Europe/Amsterdam
+      - TZ=Europe/Madrid
     depends_on:
       - postgres

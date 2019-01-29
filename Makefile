@@ -1,6 +1,6 @@
-NS ?= andrey01
+NS ?= mjara
 NAME ?= taiga
-VERSION ?= 3.1.0
+VERSION ?= latest
 
 default: build
 

@@ -1,5 +1,5 @@
 FROM debian:stretch
-MAINTAINER "Andrey Arapov <andrey.arapov@nixaid.com>"
+MAINTAINER "Manuel Jara <manuel.jara.oliver@gmail.com>"
 EXPOSE 80
 
 # To avoid problems with Dialog and curses wizards
@@ -32,7 +32,7 @@ WORKDIR $DATA
 RUN ln -svf /bin/bash /bin/sh
 
 # Install taiga-back
-RUN git clone -b 3.1.0 https://github.com/taigaio/taiga-back.git taiga-back \
+RUN git clone -b stable https://github.com/taigaio/taiga-back.git taiga-back \
     && source /usr/share/virtualenvwrapper/virtualenvwrapper.sh \
     && mkvirtualenv -p /usr/bin/python3.5 venvtaiga \
     && workon venvtaiga \
@@ -42,7 +42,7 @@ RUN git clone -b 3.1.0 https://github.com/taigaio/taiga-back.git taiga-back \
     && deactivate
 
 # Install taiga-front (compiled)
-RUN git clone -b 3.1.0-stable https://github.com/taigaio/taiga-front-dist.git taiga-front-dist
+RUN git clone -b stable https://github.com/taigaio/taiga-front-dist.git taiga-front-dist
 COPY robots.txt taiga-front-dist/dist/robots.txt
 
 USER root
@@ -53,8 +53,7 @@ RUN rm -f /etc/nginx/sites-enabled/default
 # Copy template seeds
 COPY seeds/*.tmpl /tmp/
 
-VOLUME [ "$DATA/static", \
-         "$DATA/media" ]
+VOLUME [ "$DATA/static", "$DATA/media" ]
 
 COPY launch /
 CMD /launch
