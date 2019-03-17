@@ -32,7 +32,7 @@ WORKDIR $DATA
 RUN ln -svf /bin/bash /bin/sh
 
 # Install taiga-back
-RUN git clone -b stable https://github.com/taigaio/taiga-back.git taiga-back \
+RUN git clone -b fix-weekend https://github.com/mjara78/taiga-back.git taiga-back \
     && source /usr/share/virtualenvwrapper/virtualenvwrapper.sh \
     && mkvirtualenv -p /usr/bin/python3.5 venvtaiga \
     && workon venvtaiga \
@@ -42,8 +42,11 @@ RUN git clone -b stable https://github.com/taigaio/taiga-back.git taiga-back \
     && deactivate
 
 # Install taiga-front (compiled)
-RUN git clone -b stable https://github.com/taigaio/taiga-front-dist.git taiga-front-dist
+RUN git clone -b stable https://github.com/mjara78/taiga-front-dist.git taiga-front-dist
 COPY robots.txt taiga-front-dist/dist/robots.txt
+
+RUN apt-get update \
+    && apt-get install -y nano vim
 
 USER root
 
