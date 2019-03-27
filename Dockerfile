@@ -32,7 +32,7 @@ WORKDIR $DATA
 RUN ln -svf /bin/bash /bin/sh
 
 # Install taiga-back
-RUN git clone -b fix-weekend https://github.com/mjara78/taiga-back.git taiga-back \
+RUN git clone -b stable https://github.com/mjara78/taiga-back.git taiga-back \
     && source /usr/share/virtualenvwrapper/virtualenvwrapper.sh \
     && mkvirtualenv -p /usr/bin/python3.5 venvtaiga \
     && workon venvtaiga \
