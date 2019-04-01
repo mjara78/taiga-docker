@@ -49,4 +49,6 @@ server {
     location /media {
         alias ${DATA}/media;
     }
+	
+	proxy_read_timeout 1200;
 }
