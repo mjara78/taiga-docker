@@ -39,6 +39,7 @@ RUN git clone -b stable https://github.com/mjara78/taiga-back.git taiga-back \
     && cd taiga-back \
     && pip3 install --upgrade setuptools \
     && pip3 install -r requirements.txt \
+	&& pip3 install django_smtp_ssl \
     && deactivate
 
 # Install taiga-front (compiled)
