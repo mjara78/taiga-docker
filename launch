@@ -79,6 +79,9 @@ deactivate'
 # python manage.py sample_data
 # deactivate'
 
+# Change security level for avoid SSL Errors
+sed -i 's/CipherString = DEFAULT@SECLEVEL=2/CipherString = DEFAULT@SECLEVEL=1/g' /etc/ssl/openssl.cnf 
+
 # Launch the backend
 service nginx start
 su -s /bin/sh $USER -c '/usr/local/bin/circusd "$DATA/circus.ini"'
