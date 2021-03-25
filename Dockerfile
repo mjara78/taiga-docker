@@ -1,4 +1,4 @@
-FROM debian:stretch
+FROM debian:buster
 MAINTAINER "Manuel Jara <manuel.jara.oliver@gmail.com>"
 EXPOSE 80
 
@@ -11,7 +11,7 @@ RUN apt-get update \
         bison libjpeg-dev libfreetype6-dev zlib1g-dev libzmq3-dev \
         libgdbm-dev libncurses5-dev automake libtool libffi-dev curl git \
         tmux gettext python3 python3-dev python3-pip libxml2-dev \
-        libxslt-dev virtualenvwrapper libssl1.0-dev \
+        libxslt-dev virtualenvwrapper \
         nginx && \
         rm -rf -- /var/lib/apt/lists/*
 
@@ -32,9 +32,9 @@ WORKDIR $DATA
 RUN ln -svf /bin/bash /bin/sh
 
 # Install taiga-back
-RUN git clone -b stable https://github.com/mjara78/taiga-back.git taiga-back \
+RUN git clone --depth 1 -b 5.5.9 https://github.com/taigaio/taiga-back.git taiga-back \
     && source /usr/share/virtualenvwrapper/virtualenvwrapper.sh \
-    && mkvirtualenv -p /usr/bin/python3.5 venvtaiga \
+    && mkvirtualenv -p /usr/bin/python3 venvtaiga \
     && workon venvtaiga \
     && cd taiga-back \
     && pip3 install --upgrade setuptools \
@@ -43,7 +43,7 @@ RUN git clone -b stable https://github.com/mjara78/taiga-back.git taiga-back \
     && deactivate
 
 # Install taiga-front (compiled)
-RUN git clone -b stable https://github.com/mjara78/taiga-front-dist.git taiga-front-dist
+RUN git clone --depth 1 -b 5.5.10-stable https://github.com/taigaio/taiga-front-dist.git taiga-front-dist
 COPY robots.txt taiga-front-dist/dist/robots.txt
 
 RUN apt-get update \
